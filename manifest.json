@@ -12,7 +12,7 @@
     },
     "permissions": [
         "tabs",
-        "https://stackoverflow.com/*",
-        "https://so-classifier.herokuapp.com/*"
+        "*://stackoverflow.com/*",
+        "*://so-classifier.herokuapp.com/*"
     ]
 }

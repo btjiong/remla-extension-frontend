@@ -6,7 +6,6 @@ chrome.tabs.onUpdated.addListener((tabId, change, tab) => {
     if (change.status == 'complete') {
         // Check if the current tab is a Stack Overflow post
         if (/^https:\/\/stackoverflow/.test(tab.url)) {
-            chrome.tabs.insertCSS(null, { file: './styles.css' });
             chrome.tabs.executeScript(null, { file: './foreground.js' }, () => {
                 // Gets the tab title and removes ' - Stack Overflow'
                 const title = tab.title.slice(0, -17);
