@@ -1,0 +1,14 @@
+{
+    "name": "Stack Overflow tag classifier",
+    "description": "This extension predicts the tags for a Stack Overflow title",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "background": {
+        "scripts": ["./background.js"]
+    },
+    "options_page": "./options.html",
+    "browser_action": {
+        "default_popup": "popup.html"
+    },
+    "permissions": ["tabs", "https://stackoverflow.com/*", "storage"]
+}
