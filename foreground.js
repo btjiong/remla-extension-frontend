@@ -6,14 +6,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         .getElementsByTagName('h1')[0];
 
     // Create a italics element on a newline
-    const newline = document.createElement('br');
-    const element = document.createElement('i');
-    const tags = document.createTextNode(
-        `[Predicted tags: ${request.message}]`
-    );
+    if (parent.getElementsByTagName('br').length == 0) {
+        const newline = document.createElement('br');
+        const element = document.createElement('i');
+        const tags = document.createTextNode(
+            `[Predicted tags: ${request.message}]`
+        );
 
-    // Put the predicted tags inside the created element
-    element.appendChild(tags);
-    parent.appendChild(newline);
-    parent.appendChild(element);
+        // Put the predicted tags inside the created element
+        element.appendChild(tags);
+        parent.appendChild(newline);
+        parent.appendChild(element);
+    }
 });
