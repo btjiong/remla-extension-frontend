@@ -1,7 +1,10 @@
-let active_tab_id = 0;
+var tags = [];
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    tags = request.message;
+});
 
 chrome.tabs.onUpdated.addListener((tabId, change, tab) => {
-    active_tab_id = tabId;
     // Check if the page is loaded, otherwise the title is not correct
     if (change.status == 'complete') {
         // Check if the current tab is a Stack Overflow post
@@ -12,7 +15,8 @@ chrome.tabs.onUpdated.addListener((tabId, change, tab) => {
 
                 // Create a new POST request to predict the tags of the Stack Overflow title
                 const req = new XMLHttpRequest();
-                const baseUrl = 'https://so-classifier.herokuapp.com/predict';
+                // const baseUrl = 'https://so-classifier.herokuapp.com/predict';
+                const baseUrl = 'http://127.0.0.1/predict';
                 req.open('POST', baseUrl, true);
                 req.setRequestHeader(
                     'Content-type',
@@ -21,6 +25,7 @@ chrome.tabs.onUpdated.addListener((tabId, change, tab) => {
                 req.send(
                     JSON.stringify({
                         title: title,
+                        tags: tags,
                     })
                 );
 
@@ -30,15 +35,12 @@ chrome.tabs.onUpdated.addListener((tabId, change, tab) => {
                         this.readyState === XMLHttpRequest.DONE &&
                         this.status === 200
                     ) {
-                        const result = JSON.parse(req.responseText)[
-                            'result'
-                        ][0];
+                        const result = JSON.parse(req.responseText)['result'];
 
                         // Send the result to the foreground
-                        chrome.tabs.sendMessage(active_tab_id, {
-                            message: result,
+                        chrome.tabs.sendMessage(tabId, {
+                            message: req.responseText,
                         });
-                        console.log(result);
                     }
                 };
             });
