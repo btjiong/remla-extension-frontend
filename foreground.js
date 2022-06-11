@@ -20,14 +20,40 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const acc = JSON.parse(request.message)['accuracy'];
     if (parent.getElementsByTagName('br').length == 0) {
         const newline = document.createElement('br');
-        const element = document.createElement('i');
-        const tags = document.createTextNode(
-            `[Predicted tags (${acc}): ${result}]`
+        const newlineTag = document.createElement('br');
+
+        // Put the tags on a new line
+        if (result.length > 0) {
+            parent.appendChild(newline);
+        }
+        for (const tag of result) {
+            const tagElement = document.createElement('span');
+            if (items.includes(tag)) {
+                // If the tag is correct, it should be green
+                tagElement.className = 'correct-tag pred-tag';
+            } else {
+                // If the tag is incorrect, it should be red
+                tagElement.className = 'incorrect-tag pred-tag';
+            }
+            tagElement.appendChild(document.createTextNode(`${tag}`));
+            parent.appendChild(tagElement);
+        }
+
+        // Prediction accuracy
+        const textElement = document.createElement('span');
+        textElement.className = 'pred-text fc-light mr2';
+        textElement.appendChild(
+            document.createTextNode(`Prediction accuracy `)
         );
 
-        // Put the predicted tags inside the created element
-        element.appendChild(tags);
-        parent.appendChild(newline);
-        parent.appendChild(element);
+        // {acc}
+        const accElement = document.createElement('span');
+        accElement.className = 'accuracy';
+        accElement.appendChild(document.createTextNode(`${acc.toFixed(2)}`));
+
+        // Put the accuracy on a new line
+        parent.appendChild(newlineTag);
+        parent.appendChild(textElement);
+        parent.appendChild(accElement);
     }
 });

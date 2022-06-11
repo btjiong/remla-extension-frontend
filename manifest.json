@@ -13,6 +13,7 @@
     "permissions": [
         "tabs",
         "*://stackoverflow.com/questions/*/",
-        "*://so-classifier.herokuapp.com/*"
+        "*://so-classifier.herokuapp.com/*",
+        "http://127.0.0.1/*"
     ]
 }

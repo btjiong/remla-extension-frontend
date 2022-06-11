@@ -1,0 +1,33 @@
+.correct-tag {
+    color: #1f7a1f;
+    background-color: #d6f5d6;
+    border-color: var(--theme-tag-border-color);
+}
+
+.incorrect-tag {
+    color: #cc0000;
+    background-color: #ffcccc;
+    border-color: var(--theme-tag-border-color);
+}
+
+.pred-tag {
+    display: inline-block;
+    padding: 0.4em 0.5em;
+    margin: var(--su2) var(--su2) var(--su2) 0;
+    font-size: var(--fs-caption);
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: var(--br-sm);
+}
+
+.pred-text {
+    font-size: var(--fs-body1);
+}
+
+.accuracy {
+    font-size: var(--fs-body1);
+}
