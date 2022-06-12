@@ -1,32 +1,59 @@
-name: Chrome Webstore
+name: Deploy Docker
 
 on:
-  push:
-    branches:
-       - '**'  
-  pull_request:
-    branches:
-       - '**'  
-
-  workflow_dispatch:
+    push:
+        tags: ["v[0-9]+.[0-9]+.[0-9]+"]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - uses: actions/checkout@v3
-      
-      
-      - name: zip extension
-        uses: montudor/action-zip@v1.0.0
-        with:
-          args: zip -qq -r application.zip application    
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Parse version info from tag
+              run: |
+                  VERSION=${GITHUB_REF:11}
+                  MAJOR=`echo "$VERSION" | cut -d . -f 1`
+                  MINOR=`echo "$VERSION" | cut -d . -f 2`
+                  PATCH=`echo "$VERSION" | cut -d . -f 3`
+                  echo "version=$VERSION" >> $GITHUB_ENV
+                  echo "version_major=$MAJOR" >> $GITHUB_ENV
+                  echo "version_minor=$MINOR" >> $GITHUB_ENV
+                  echo "version_patch=$PATCH" >> $GITHUB_ENV
+            - name: Login to registry
+              run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          
+            - name: zip extension
+              uses: montudor/action-zip@v1.0.0
+              with:
+                args: zip -qq -r application.zip application    
   
-      - name: Upload & Release
-        uses: mnao305/chrome-extension-upload@2.2.0
-        with:
-          file-path: application.zip
-          extension-id: ienldhembaiinbhbpbholkjefalhebol
-          client-id: ${{ secrets.CLIENT_ID }}
-          refresh-token: ${{ secrets.REFRESH_TOKEN }}
+           # - name: Upload & Release
+           #   uses: mnao305/chrome-extension-upload@2.2.0
+           #   with:
+           #     file-path: application.zip
+           #     extension-id: ienldhembaiinbhbpbholkjefalhebol
+           #     client-id: ${{ secrets.CLIENT_ID }}
+           #     refresh-token: ${{ secrets.REFRESH_TOKEN }}
+         
+            - name: release
+              uses: actions/create-release@v1
+              id: create_release
+              with:
+                draft: false
+                prerelease: false
+                release_name: ${{ env.version }}
+                tag_name: ${{ github.ref }}
+              env:
+                GITHUB_TOKEN: ${{ github.token }}
+                
+            - name: Upload Release Asset
+              id: upload-release-asset 
+              uses: actions/upload-release-asset@v1
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+                asset_path: ./application.zip
+                asset_name: extension.zip
+                asset_content_type: application/zip
