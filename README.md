@@ -1,5 +1,5 @@
 # Instructions
-1. Download the release (zip)
+1. Download the latest release (zip)
 2. Go to chrome://extensions/
 3. Drag the downloaded zip into the page
 
