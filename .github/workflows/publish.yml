@@ -23,10 +23,11 @@ jobs:
             - name: Login to registry
               run: echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           
-            - name: zip extension
-              uses: montudor/action-zip@v1.0.0
+            - uses: papeloto/action-zip@v1
               with:
-                args: zip -qq -r application.zip ./application/    
+                files: application/
+                recursive: false
+                dest: application.zip
   
            # - name: Upload & Release
            #   uses: mnao305/chrome-extension-upload@2.2.0
