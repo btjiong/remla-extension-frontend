@@ -30,3 +30,4 @@ jobs:
           extension-id: ienldhembaiinbhbpbholkjefalhebol
           client-id: ${{ secrets.CLIENT_ID }}
           refresh-token: ${{ secrets.REFRESH_TOKEN }}
+          publish: false
