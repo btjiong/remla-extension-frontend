@@ -1,8 +1,8 @@
 {
     "name": "Stack Overflow tag classifier",
-    "description": "This extension predicts the tags for a Stack Overflow title",
+    "description": "This extension predicts the tags for a Stack Overflow post when visiting Stack Overflow.",
     "version": "0.0.1",
-    "manifest_version": 2,
+    "manifest_version": 3,
     "background": {
         "scripts": ["./background.js"]
     },
@@ -11,9 +11,11 @@
         "default_popup": "popup.html"
     },
     "permissions": [
-        "tabs",
+        "tabs"
+    ],
+    "host_permissions": [
         "*://stackoverflow.com/questions/*/",
         "*://so-classifier.herokuapp.com/*",
         "http://127.0.0.1/*"
-    ]
+      ]
 }
