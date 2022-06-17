@@ -1,7 +1,9 @@
+var title;
 var tags = [];
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    tags = request.message;
+    title = request.message[0];
+    tags = request.message[1];
 });
 
 chrome.tabs.onUpdated.addListener((tabId, change, tab) => {
@@ -15,7 +17,7 @@ chrome.tabs.onUpdated.addListener((tabId, change, tab) => {
             chrome.tabs.insertCSS(null, { file: './style.css' });
             chrome.tabs.executeScript(null, { file: './foreground.js' }, () => {
                 // Gets the tab title and removes ' - Stack Overflow'
-                const title = tab.title.slice(0, -17);
+                // const title = tab.title.slice(0, -17);
 
                 // Create a new POST request to predict the tags of the Stack Overflow title
                 const req = new XMLHttpRequest();

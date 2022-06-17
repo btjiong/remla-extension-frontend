@@ -2,6 +2,9 @@ const parent = document
     .getElementById('question-header')
     .getElementsByTagName('h1')[0];
 
+const title =
+    document.getElementsByClassName('question-hyperlink')[0].innerText;
+
 // Get the actual Stack Overflow tags
 const itemColl = document
     .getElementsByClassName('d-flex ps-relative fw-wrap')[0]
@@ -12,7 +15,7 @@ for (var i = 0; i < itemColl.length; i++) {
     items.push(itemColl[i].textContent);
 }
 
-chrome.runtime.sendMessage({ message: items });
+chrome.runtime.sendMessage({ message: [title, items] });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     // Create a italics element on a newline
